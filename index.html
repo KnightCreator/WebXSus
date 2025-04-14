@@ -4,10 +4,6 @@
   <meta charset="UTF-8">
   <title>Cozy Corner</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       padding: 0;
@@ -15,6 +11,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow: hidden;
       height: 100vh;
+      position: relative;
     }
 
     .header-box {
@@ -32,6 +29,7 @@
       transform: translate(-50%, -50%);
       animation: glitch 1s infinite;
       cursor: pointer;
+      transition: left 0.2s ease, top 0.2s ease;
     }
 
     .header-box h1 {
@@ -62,6 +60,34 @@
       font-weight: bold;
       color: #333;
     }
+
+    .flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 0.3s;
+    }
+
+    .sus-alert {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: red;
+      color: white;
+      padding: 20px 40px;
+      font-size: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px red;
+      z-index: 20;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -71,21 +97,32 @@
     <h1 id="prank-text">Welcome, Friend :)</h1>
   </div>
 
+  <div class="flash" id="screen-flash"></div>
+  <div class="sus-alert" id="sus-alert">SUS ALERT</div>
+
+  <audio id="sus-sound" src="https://cdn.glitch.global/7b489c7f-6c57-4d77-b7d3-394c51a8b6c4/sus.mp3?v=1686501761234" preload="auto"></audio>
+
   <script>
     const texts = [
       "Welcome, Friend :)",
       "U smell like onion 🧅",
-      "Why u clicking so hard?",
       "DIAMLAH BODO",
       "You're being watched 👀",
       "hi loser 😎",
       "Where’s your CSS now?",
-      "LOL imagine falling for this"
+      "LOL imagine falling for this",
+      "Sussy behavior detected",
+      "Your IP: 127.0.0.1",
+      "Click faster 😐"
     ];
 
     const box = document.getElementById('prank-box');
     const h1 = document.getElementById('prank-text');
     const scoreDisplay = document.getElementById('score');
+    const flash = document.getElementById('screen-flash');
+    const susAlert = document.getElementById('sus-alert');
+    const sound = document.getElementById('sus-sound');
+
     let score = 0;
 
     function changeText() {
@@ -93,6 +130,17 @@
       const randomAngle = Math.floor(Math.random() * 20) - 10;
       h1.innerText = randomText;
       h1.style.transform = `rotate(${randomAngle}deg)`;
+    }
+
+    function flashScreen() {
+      flash.style.background = Math.random() < 0.5 ? 'white' : 'red';
+      flash.style.opacity = 1;
+      setTimeout(() => flash.style.opacity = 0, 150);
+    }
+
+    function showSusAlert() {
+      susAlert.style.display = 'block';
+      setTimeout(() => susAlert.style.display = 'none', 1000);
     }
 
     function moveBox() {
@@ -109,9 +157,18 @@
       scoreDisplay.innerText = score;
       moveBox();
       changeText();
+
+      if (Math.random() < 0.5) {
+        flashScreen();
+      }
+      if (Math.random() < 0.3) {
+        showSusAlert();
+      }
+      if (Math.random() < 0.7) {
+        sound.play();
+      }
     }
 
-    // Text changes automatically every 3 seconds too
     setInterval(changeText, 3000);
   </script>
 </body>
